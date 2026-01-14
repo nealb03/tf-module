@@ -7,15 +7,11 @@ variable "ec2_instance_type" {
 variable "ec2_instance_name" {
   type        = string
   description = "The name to give the instance."
+  default     = "base-image-builder"
 }
 
 variable "ec2_ami_id" {
   type        = string
   description = "The AMI ID to use to launch the instance. NB: These differ between regions."
-}
-
-variable "ec2_key_name" {
-  type        = string
-  description = "The name of the EC2 key pair to associate with the instance."
-  default     = "tf-builder-key"
+  default     = "ami-091e2bfe31c49c467" # same ID you used in main.tf locally
 }
