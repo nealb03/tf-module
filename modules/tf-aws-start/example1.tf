@@ -26,7 +26,7 @@ resource "aws_instance" "sample" {
 }
 
 module "vpc" {
-  source = "terraform-aws-modules/vpc/aws"
+  source = "github.com/nealb03/tf-module/tree/main/modules"
 
   name = "my-vpc"
   cidr = "10.0.0.0/16"

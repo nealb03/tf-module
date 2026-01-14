@@ -17,7 +17,7 @@ owners = ["099720109477"] # Canonical
 }
 
 module "my_ec2_instance" {
-  source = "github.com/nealb03/Apps/tree/terraform-workflow"
+  source = "github.com/nealb03/tf-module/tree/main/modules"
 
   ec2_instance_type = var.ec2_instance_type
   ec2_instance_name = var.ec2_instance_type
