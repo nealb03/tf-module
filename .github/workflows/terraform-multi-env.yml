@@ -13,6 +13,11 @@ on:
           - dev
           - qa
           - prod
+      apply:
+        description: "Run terraform apply after a successful plan?"
+        required: true
+        type: boolean
+        default: false
 
 jobs:
   terraform:
@@ -23,6 +28,7 @@ jobs:
       TF_REGION: us-east-1
       TF_WORKING_DIR: modules/tf-module-example
       TARGET_ENV: ${{ github.event.inputs.environment }}
+      TF_APPLY: ${{ github.event.inputs.apply }}
 
     permissions:
       id-token: write
@@ -58,10 +64,17 @@ jobs:
         run: terraform validate -no-color
 
       - name: Terraform plan (${{ env.TARGET_ENV }})
+        id: plan
         run: |
           terraform plan \
             -input=false \
             -no-color \
+            -out=tfplan \
             -var "environment=${{ env.TARGET_ENV }}" \
             -var "ec2_ami_id=ami-0c02fb55956c7d316" \
             -var "ec2_instance_name=example-ec2-instance-${{ env.TARGET_ENV }}"
+
+      - name: Terraform apply (${{ env.TARGET_ENV }})
+        if: ${{ github.event.inputs.apply == 'true' }}
+        run: |
+          terraform apply -input=false -auto-approve tfplan
