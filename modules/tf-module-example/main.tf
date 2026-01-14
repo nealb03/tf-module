@@ -1,17 +1,6 @@
 ###########################################################
-# Provider configuration
+# AWS Provider
 ###########################################################
-
-terraform {
-  required_version = ">= 1.5.0"
-
-  required_providers {
-    aws = {
-      source  = "hashicorp/aws"
-      version = "~> 5.0"
-    }
-  }
-}
 
 provider "aws" {
   region = var.aws_region
@@ -24,8 +13,7 @@ provider "aws" {
 # NOTE:
 # The VPC, subnet, and security group below were already created in AWS.
 # For this GitHub Actions demo, we comment them out so no new resources
-# are created or modified. The code is left here to demonstrate how the
-# module would normally provision networking.
+# are created or modified. The code remains for interview review.
 
 # resource "aws_vpc" "this" {
 #   cidr_block           = "10.0.0.0/16"
@@ -87,18 +75,18 @@ provider "aws" {
 
 # NOTE:
 # The EC2 instance (base-image-builder / i-0985f0f8ced553d73) has already
-# been created in AWS. For this demo, we comment out the instance
-# resource so terraform apply is effectively a no-op.
+# been created in AWS and is visible in the console. For this demo we
+# comment out the instance resource so terraform apply is a no-op.
 
 # resource "aws_instance" "this" {
 #   ami           = var.ec2_ami_id
 #   instance_type = var.ec2_instance_type
 #
-#   # If we were creating networking here:
+#   # If networking were created here:
 #   # subnet_id              = aws_subnet.public.id
 #   # vpc_security_group_ids = [aws_security_group.ec2.id]
 #
-#   # For existing networking via variables, we would use:
+#   # Or, if attaching to existing infra:
 #   # subnet_id              = var.subnet_id
 #   # vpc_security_group_ids = var.security_group_ids
 #
@@ -111,7 +99,7 @@ provider "aws" {
 # }
 
 ###########################################################
-# Outputs (optional, kept for documentation)
+# Outputs (DISABLED for demo)
 ###########################################################
 
 # output "vpc_id" {
