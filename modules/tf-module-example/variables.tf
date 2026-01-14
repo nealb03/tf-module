@@ -23,7 +23,7 @@ variable "ec2_ami_id" {
   description = "EC2 AMI ID for the instance"
 
   # Example Amazon Linux 2 AMI in us-east-1 (update if needed)
-  default     = "ami-0c02fb55956c7d316"
+  default = "ami-0c02fb55956c7d316"
 }
 
 variable "ec2_instance_type" {
@@ -41,7 +41,7 @@ variable "ec2_instance_name" {
 variable "ec2_key_name" {
   type        = string
   description = "Name of the existing EC2 key pair to associate with the instance"
-  default     = ""
+  default     = "tf-builder-key"
 }
 
 variable "ec2_additional_tags" {
@@ -51,29 +51,29 @@ variable "ec2_additional_tags" {
 }
 
 ###########################################################
-# Networking variables (if your module uses them)
+# Networking variables (if needed later)
 ###########################################################
 
 variable "vpc_id" {
   type        = string
-  description = "ID of the VPC where resources should be created"
+  description = "ID of the VPC where resources should be created (if using an existing VPC)"
   default     = ""
 }
 
 variable "subnet_id" {
   type        = string
-  description = "ID of the subnet where the EC2 instance should be launched"
+  description = "ID of the subnet where the EC2 instance should be launched (if using an existing subnet)"
   default     = ""
 }
 
 variable "security_group_ids" {
   type        = list(string)
-  description = "List of security group IDs to associate with the EC2 instance"
+  description = "List of security group IDs to associate with the EC2 instance (if using existing SGs)"
   default     = []
 }
 
 ###########################################################
-# Root module general tags
+# Common tags
 ###########################################################
 
 variable "common_tags" {
