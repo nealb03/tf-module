@@ -1,6 +1,7 @@
 name: Terraform Multi-Env Workflow
 
 on:
+  # Manual trigger with environment selection
   workflow_dispatch:
     inputs:
       environment:
@@ -14,15 +15,23 @@ on:
           - qa
           - prod
 
+  # Optional: keep push-based runs but default to 'dev'
+  push:
+    branches:
+      - main
+      - my-branch
+
 jobs:
   terraform:
-    name: Terraform (${{ github.event.inputs.environment }})
+    # For workflow_dispatch, use the selected env; for push, default to 'dev'
+    name: Terraform (${{ github.event_name == 'workflow_dispatch' && github.event.inputs.environment || 'dev' }})
     runs-on: ubuntu-latest
 
     env:
       TF_REGION: us-east-1
       TF_WORKING_DIR: modules/tf-module-example
-      TARGET_ENV: ${{ github.event.inputs.environment }}
+      # Derive TARGET_ENV from input for manual runs, or 'dev' for push runs
+      TARGET_ENV: ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.environment || 'dev' }}
 
     permissions:
       id-token: write
