@@ -56,4 +56,10 @@ jobs:
         run: terraform validate -no-color
 
       - name: Terraform plan (${{ matrix.environment }})
-        run: terraform plan -input=false -no-color -var "environment=${{ matrix.environment }}"
+        run: |
+          terraform plan \
+            -input=false \
+            -no-color \
+            -var "environment=${{ matrix.environment }}" \
+            -var "ec2_ami_id=ami-0c02fb55956c7d316" \
+            -var "ec2_instance_name=example-ec2-instance-${{ matrix.environment }}"

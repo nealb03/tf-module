@@ -51,4 +51,9 @@ jobs:
         run: terraform validate -no-color
 
       - name: Terraform plan
-        run: terraform plan -input=false -no-color
+        run: |
+          terraform plan \
+            -input=false \
+            -no-color \
+            -var "ec2_ami_id=ami-0c02fb55956c7d316" \
+            -var "ec2_instance_name=example-ec2-instance"
