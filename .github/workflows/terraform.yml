@@ -1,4 +1,4 @@
-name: Terraform CI
+name: Terraform Init Validate Plan
 
 on:
   push:
