@@ -12,5 +12,10 @@ variable "ec2_instance_name" {
 variable "ec2_ami_id" {
   type        = string
   description = "The AMI ID to use to launch the instance. NB: These differ between regions."
+}
 
+variable "ec2_key_name" {
+  type        = string
+  description = "The name of the EC2 key pair to associate with the instance."
+  default     = "tf-builder-key"
 }
