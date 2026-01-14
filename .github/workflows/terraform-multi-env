@@ -14,7 +14,6 @@ jobs:
     name: Terraform (${{ matrix.environment }})
     runs-on: ubuntu-latest
 
-    # Run once per environment
     strategy:
       matrix:
         environment: [sandbox, dev, qa, prod]
@@ -24,8 +23,8 @@ jobs:
       TF_WORKING_DIR: modules/tf-module-example
 
     permissions:
-      id-token: write   # required for OIDC
-      contents: read    # required to checkout the repo
+      id-token: write
+      contents: read
 
     defaults:
       run:
@@ -35,15 +34,10 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      # Map each environment to its own AWS IAM role
       - name: Configure AWS credentials via OIDC (${{ matrix.environment }})
         uses: aws-actions/configure-aws-credentials@v4
         with:
-          role-to-assume: ${{ matrix.environment == 'sandbox' && 'arn:aws:iam::288761763536:role/GithubActionsRole-SANDBOX' ||
-                             matrix.environment == 'dev'     && 'arn:aws:iam::288761763536:role/GithubActionsRole-DEV'     ||
-                             matrix.environment == 'qa'      && 'arn:aws:iam::288761763536:role/GithubActionsRole-QA'      ||
-                             matrix.environment == 'prod'    && 'arn:aws:iam::288761763536:role/GithubActionsRole-PROD'    ||
-                             'arn:aws:iam::288761763536:role/GithubActionsRole-DEV' }}
+          role-to-assume: arn:aws:iam::288761763536:role/GithubActionsRole
           role-session-name: github-actions-${{ matrix.environment }}
           aws-region: ${{ env.TF_REGION }}
 
