@@ -1,0 +1,59 @@
+name: Terraform Multi-Env Workflow
+
+on:
+  push:
+    branches:
+      - main
+      - my-branch
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  terraform:
+    name: Terraform (${{ matrix.environment }})
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        environment: [sandbox, dev, qa, prod]
+
+    env:
+      TF_REGION: us-east-1
+      TF_WORKING_DIR: modules/tf-module-example
+
+    permissions:
+      id-token: write
+      contents: read
+
+    defaults:
+      run:
+        working-directory: ${{ env.TF_WORKING_DIR }}
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Configure AWS credentials via OIDC (${{ matrix.environment }})
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: arn:aws:iam::288761763536:role/GithubActionsRole
+          role-session-name: github-actions-${{ matrix.environment }}
+          aws-region: ${{ env.TF_REGION }}
+
+      - name: Set up Terraform
+        uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: 1.5.7
+
+      - name: Terraform fmt (${{ matrix.environment }})
+        run: terraform fmt -check
+
+      - name: Terraform init (${{ matrix.environment }})
+        run: terraform init -input=false
+
+      - name: Terraform validate (${{ matrix.environment }})
+        run: terraform validate -no-color
+
+      - name: Terraform plan (${{ matrix.environment }})
+        run: terraform plan -input=false -no-color -var "environment=${{ matrix.environment }}"
